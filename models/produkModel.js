@@ -57,6 +57,22 @@ const daftarProduk = [
     harga: 30000,
     stok: 25,
   },
+  {
+    id: 8,
+    nama: 'Kripik Nanas 150 g',
+    kategori: 'Kripik buah',
+    deskripsi: 'Irisan nanas yang renyah, perpaduan manis dan asam yang menyegarkan.',
+    harga: 25000,
+    stok: 75,
+  },
+  {
+    id: 9,
+    nama: 'Kripik Mangga 150 g',
+    kategori: 'Kripik buah',
+    deskripsi: 'Mangga matang yang manis dan harum, dengan tekstur renyah di setiap gigitan.',
+    harga: 30000,
+    stok: 50,
+  },
 ];
 
 const ProdukModel = {
