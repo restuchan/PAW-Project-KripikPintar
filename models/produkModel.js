@@ -49,6 +49,14 @@ const daftarProduk = [
     harga: 27000,
     stok: 9,
   },
+  {
+    id: 7,
+    nama: 'Kripik Durian 100 g',
+    kategori: 'Kripik buah',
+    deskripsi: 'Durian yang diproses menjadi kripik, enak dan gurih.',
+    harga: 30000,
+    stok: 25,
+  },
 ];
 
 const ProdukModel = {
