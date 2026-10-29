@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="KripikPintar: katalog kripik buah khas Malang.">
+  <title><%= judul %></title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%231f6b45'/%3E%3Cellipse cx='16' cy='14' rx='9' ry='6' fill='%23f0bd3c'/%3E%3Cpath d='M6 17h20c0 6-4 9-10 9S6 23 6 17z' fill='%2312372a'/%3E%3C/svg%3E">
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            daun: '#12372a',
+            hutan: '#1f6b45',
+            segar: '#2a8a58',
+            pucuk: '#e3f2e8',
+            kabut: '#f3f9f5',
+            garis: '#d2e3d8',
+            emas: '#f0bd3c',
+            tinta: '#16241d',
+            lumut: '#4a5d53',
+            bata: '#b4442b'
+          },
+          fontFamily: {
+            sans: ['system-ui', '-apple-system', '"Segoe UI"', 'Roboto', '"Helvetica Neue"', 'Arial', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+  <style type="text/tailwindcss">
+    @layer components {
+      .btn {
+        @apply inline-flex items-center justify-center min-h-[3rem] px-6 rounded-full font-bold transition-colors
+               focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-offset-2 focus-visible:outline-segar;
+      }
+      .btn-primary { @apply btn bg-hutan text-white hover:bg-daun; }
+      .btn-ghost   { @apply btn border-2 border-hutan text-hutan hover:bg-pucuk; }
+      .nav-link {
+        @apply inline-flex items-center min-h-[2.75rem] px-4 rounded-full border border-garis bg-white text-sm font-semibold text-daun
+               hover:bg-pucuk focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-offset-2 focus-visible:outline-segar;
+      }
+    }
+  </style>
+</head>

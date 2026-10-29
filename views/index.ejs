@@ -1,0 +1,107 @@
+<%- include('partials/head', { judul: judul }) %>
+<body class="bg-kabut text-tinta font-sans antialiased">
+
+  <a href="#konten"
+     class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-10 focus:bg-daun focus:text-white focus:px-4 focus:py-2 focus:rounded-lg">
+    Lewati ke konten utama
+  </a>
+
+  <header class="max-w-6xl mx-auto px-5 sm:px-8 py-5 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <a href="/" class="flex items-center gap-3 text-xl font-extrabold tracking-tight text-daun">
+      <svg viewBox="0 0 40 40" class="h-9 w-9" aria-hidden="true">
+        <circle cx="20" cy="20" r="20" fill="#1f6b45"/>
+        <ellipse cx="20" cy="17" rx="11" ry="7" fill="#f0bd3c" transform="rotate(-8 20 17)"/>
+        <path d="M8 20h24c0 7-5 11-12 11S8 27 8 20z" fill="#12372a"/>
+      </svg>
+      <%= namaToko %>
+    </a>
+    <nav class="flex flex-wrap gap-2" aria-label="Navigasi utama">
+      <a href="#produk" class="nav-link">Produk</a>
+      <a href="/api/produk" class="nav-link">API produk</a>
+      <a href="/api/status" class="nav-link">API status</a>
+    </nav>
+  </header>
+
+  <main id="konten">
+    <!-- Hero -->
+    <section class="max-w-6xl mx-auto px-5 sm:px-8 pt-8 pb-16 grid lg:grid-cols-2 gap-10 lg:gap-14 items-center">
+      <div>
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.05] tracking-tight text-daun">
+          Kripik buah khas Malang, renyah dari kebun.
+        </h1>
+        <p class="mt-5 text-lg text-lumut max-w-lg">
+          KripikPintar adalah katalog usaha kripik buah rumahan. Daftar produk di bawah diambil dari server
+          lewat API yang bisa kamu buka langsung.
+        </p>
+        <div class="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+          <a href="#produk" class="btn-primary">Lihat produk</a>
+          <a href="/api/produk" class="btn-ghost">API produk</a>
+          <a href="/api/status" class="btn-ghost">API status</a>
+        </div>
+      </div>
+
+      <!-- Respons asli dari /api/status -->
+      <div class="rounded-2xl bg-daun text-pucuk p-5 sm:p-6 font-mono text-sm shadow-xl">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <span class="font-semibold">GET /api/status</span>
+          <span class="flex items-center gap-2">
+            <span id="status-dot" class="h-2.5 w-2.5 rounded-full bg-pucuk/40"></span>
+            <span id="status-label">Menghubungi server</span>
+          </span>
+        </div>
+        <pre id="status-output" class="mt-4 whitespace-pre-wrap break-words text-emas min-h-[9rem]" aria-live="polite">...</pre>
+      </div>
+    </section>
+
+    <!-- Produk -->
+    <section id="produk" class="max-w-6xl mx-auto px-5 sm:px-8 pb-20 scroll-mt-6" aria-labelledby="judul-produk">
+      <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <h2 id="judul-produk" class="text-3xl font-extrabold tracking-tight text-daun">Produk minggu ini</h2>
+          <p class="mt-2 text-lumut">
+            <%= produk.length %> produk dari <code class="font-mono text-sm">models/produkModel.js</code>
+          </p>
+        </div>
+        <a href="/api/produk" class="font-semibold text-hutan underline underline-offset-4 hover:text-daun">Lihat data JSON</a>
+      </div>
+
+      <ul class="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <% produk.forEach(function (p) { %>
+          <li class="flex flex-col rounded-2xl border border-garis bg-white p-6">
+            <span class="self-start rounded-full bg-pucuk px-3 py-1 text-xs font-bold text-hutan"><%= p.kategori %></span>
+            <h3 class="mt-4 text-xl font-bold text-daun"><%= p.nama %></h3>
+            <p class="mt-2 flex-1 text-lumut"><%= p.deskripsi %></p>
+            <div class="mt-6 flex items-end justify-between gap-3">
+              <p class="text-xl font-extrabold text-daun"><%= p.hargaFormat %></p>
+              <p class="text-sm font-semibold <%= p.stok < 15 ? 'text-bata' : 'text-lumut' %>">
+                <%= p.stok < 15 ? 'Stok menipis: ' : 'Stok ' %><%= p.stok %>
+              </p>
+            </div>
+          </li>
+        <% }); %>
+      </ul>
+    </section>
+  </main>
+
+  <script>
+    // Ambil data asli dari endpoint /api/status
+    (async function () {
+      const dot = document.getElementById('status-dot');
+      const label = document.getElementById('status-label');
+      const output = document.getElementById('status-output');
+      try {
+        const res = await fetch('/api/status');
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const data = await res.json();
+        output.textContent = JSON.stringify(data, null, 2);
+        dot.className = 'h-2.5 w-2.5 rounded-full bg-emerald-400';
+        label.textContent = 'Terhubung';
+      } catch (err) {
+        output.textContent = 'Gagal memuat status: ' + err.message;
+        dot.className = 'h-2.5 w-2.5 rounded-full bg-red-400';
+        label.textContent = 'Gagal';
+      }
+    })();
+  </script>
+
+<%- include('partials/footer', { namaToko: namaToko }) %>
