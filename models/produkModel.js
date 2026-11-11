@@ -1,84 +1,47 @@
-// Data masih hardcode. Nanti bagian ini diganti query database,
-// sementara controller dan route tidak perlu diubah.
-const daftarProduk = [
-  {
-    id: 1,
-    nama: 'Kripik Apel Malang 100 g',
-    kategori: 'Kripik buah',
-    deskripsi: 'Irisan apel Malang yang renyah dengan rasa manis alami.',
-    harga: 28000,
-    stok: 40,
-  },
-  {
-    id: 2,
-    nama: 'Kripik Nangka 100 g',
-    kategori: 'Kripik buah',
-    deskripsi: 'Nangka matang pilihan, wangi dan manis, enak untuk teman santai.',
-    harga: 30000,
-    stok: 32,
-  },
-  {
-    id: 3,
-    nama: 'Kripik Pisang 150 g',
-    kategori: 'Kripik buah',
-    deskripsi: 'Pisang diiris tipis, gurih dan renyah, cocok untuk camilan keluarga.',
-    harga: 18000,
-    stok: 55,
-  },
-  {
-    id: 4,
-    nama: 'Kripik Salak 100 g',
-    kategori: 'Kripik buah',
-    deskripsi: 'Salak dengan rasa khas dan tekstur renyah yang berbeda dari kripik biasa.',
-    harga: 26000,
-    stok: 20,
-  },
-  {
-    id: 5,
-    nama: 'Kripik Jambu Biji 100 g',
-    kategori: 'Kripik buah',
-    deskripsi: 'Jambu biji dengan rasa segar dan ringan di lidah.',
-    harga: 24000,
-    stok: 12,
-  },
-  {
-    id: 6,
-    nama: 'Kripik Melon 100 g',
-    kategori: 'Kripik buah',
-    deskripsi: 'Melon manis lembut, enak dimakan langsung atau jadi hadiah kecil.',
-    harga: 27000,
-    stok: 9,
-  },
-  {
-    id: 7,
-    nama: 'Kripik Durian 100 g',
-    kategori: 'Kripik buah',
-    deskripsi: 'Durian yang diproses menjadi kripik, enak dan gurih.',
-    harga: 30000,
-    stok: 25,
-  },
-  {
-    id: 8,
-    nama: 'Kripik Nanas 150 g',
-    kategori: 'Kripik buah',
-    deskripsi: 'Irisan nanas yang renyah, perpaduan manis dan asam yang menyegarkan.',
-    harga: 25000,
-    stok: 75,
-  },
-  {
-    id: 9,
-    nama: 'Kripik Mangga 150 g',
-    kategori: 'Kripik buah',
-    deskripsi: 'Mangga matang yang manis dan harum, dengan tekstur renyah di setiap gigitan.',
-    harga: 30000,
-    stok: 50,
-  },
-];
+const { DataTypes } = require('sequelize');
+const sequelize = require('../config/database');
 
-const ProdukModel = {
-  getAll() {
-    return daftarProduk;
+const Produk = sequelize.define(
+  'Produk',
+  {
+    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+    nama: { type: DataTypes.STRING(120), allowNull: false },
+    kategori: { type: DataTypes.STRING(60), allowNull: false, defaultValue: 'Kripik buah' },
+    deskripsi: { type: DataTypes.TEXT, allowNull: true },
+    harga: { type: DataTypes.INTEGER, allowNull: false, validate: { min: 0 } },
+    stok: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 0, validate: { min: 0 } },
+    foto: { type: DataTypes.STRING, allowNull: true }, // path file, contoh: /uploads/123.jpg
+    keunggulan: { type: DataTypes.TEXT, allowNull: true },
+    targetPembeli: { type: DataTypes.STRING(150), allowNull: true },
+    userId: { type: DataTypes.INTEGER, allowNull: true }, // pemilik yang membuat produk
   },
+  { tableName: 'produk', timestamps: true, underscored: true }
+);
+
+// ----- Operasi data (dipanggil oleh controller) -----
+Produk.ambilSemua = function () {
+  return this.findAll({ order: [['id', 'ASC']] });
 };
 
-module.exports = ProdukModel;
+Produk.ambilById = function (id) {
+  return this.findByPk(id);
+};
+
+Produk.tambah = function (data) {
+  return this.create(data);
+};
+
+Produk.ubah = async function (id, data) {
+  const produk = await this.findByPk(id);
+  if (!produk) return null;
+  return produk.update(data);
+};
+
+Produk.hapus = async function (id) {
+  const produk = await this.findByPk(id);
+  if (!produk) return null;
+  await produk.destroy();
+  return produk;
+};
+
+module.exports = Produk;
