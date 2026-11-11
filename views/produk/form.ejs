@@ -1,0 +1,103 @@
+<%- include('../partials/head', { judul: judul }) %>
+<body class="bg-kabut font-sans text-tinta antialiased">
+<%- include('../partials/header') %>
+<% const ubah = mode === 'ubah'; %>
+
+  <main id="konten" class="mx-auto max-w-6xl px-5 pb-20 sm:px-8">
+    <p class="text-sm text-lumut">
+      <a href="/" class="font-semibold text-hutan underline underline-offset-4">Beranda</a> &rsaquo;
+      <span aria-current="page"><%= ubah ? 'Ubah Produk' : 'Data Produk' %></span>
+    </p>
+    <h1 class="mt-3 text-4xl font-extrabold tracking-tight text-daun"><%= ubah ? 'Ubah Produk' : 'Data Produk' %></h1>
+    <p class="mt-2 text-lg text-lumut">Isi data produk kripikmu, lalu simpan atau langsung buat caption promosinya.</p>
+
+    <div class="mt-8 grid gap-8 lg:grid-cols-3">
+      <!-- Form -->
+      <form id="form-produk" class="space-y-5 lg:col-span-2" novalidate
+            data-mode="<%= mode %>" data-id="<%= produk ? produk.id : '' %>">
+        <p id="form-error" role="alert" class="hidden rounded-xl border border-bata bg-red-50 px-4 py-3 text-sm font-semibold text-bata"></p>
+
+        <div>
+          <label for="nama" class="label">Nama produk</label>
+          <input id="nama" name="nama" type="text" class="kolom" maxlength="120" placeholder="Contoh: Kripik Apel Malang 100 g" value="<%= produk ? produk.nama : '' %>">
+          <p class="pesan-error hidden" data-error="nama"></p>
+        </div>
+
+        <div class="grid gap-5 sm:grid-cols-3">
+          <div>
+            <label for="harga" class="label">Harga (Rp)</label>
+            <input id="harga" name="harga" type="number" min="0" step="1" inputmode="numeric" class="kolom" placeholder="Contoh: 28000" value="<%= produk ? produk.harga : '' %>">
+            <p class="pesan-error hidden" data-error="harga"></p>
+          </div>
+          <div>
+            <label for="stok" class="label">Stok</label>
+            <input id="stok" name="stok" type="number" min="0" step="1" inputmode="numeric" class="kolom" placeholder="Contoh: 40" value="<%= produk ? produk.stok : '' %>">
+            <p class="pesan-error hidden" data-error="stok"></p>
+          </div>
+          <div>
+            <label for="foto" class="label">Foto produk</label>
+            <input id="foto" name="foto" type="file" accept="image/jpeg,image/png,image/webp,image/gif"
+                   class="kolom file:mr-3 file:rounded-full file:border-0 file:bg-pucuk file:px-3 file:py-1.5 file:font-semibold file:text-hutan">
+            <p class="pesan-error hidden" data-error="foto"></p>
+          </div>
+        </div>
+
+        <div id="foto-wadah" class="<%= produk && produk.foto ? '' : 'hidden' %> flex items-center gap-4 rounded-xl border border-garis bg-white p-3">
+          <img id="foto-preview" src="<%= produk && produk.foto ? produk.foto : '' %>" alt="Pratinjau foto produk" class="h-20 w-20 rounded-lg object-cover">
+          <p class="text-sm text-lumut">Pratinjau foto. Pilih file baru untuk menggantinya (maks. 2 MB).</p>
+        </div>
+
+        <div>
+          <label for="keunggulan" class="label">Keunggulan produk</label>
+          <textarea id="keunggulan" name="keunggulan" rows="4" class="kolom" placeholder="Contoh: renyah, manis alami, dari apel Malang segar"><%= produk && produk.keunggulan ? produk.keunggulan : '' %></textarea>
+          <p class="pesan-error hidden" data-error="keunggulan"></p>
+        </div>
+
+        <div>
+          <label for="targetPembeli" class="label">Target pembeli</label>
+          <input id="targetPembeli" name="targetPembeli" type="text" class="kolom" maxlength="150" placeholder="Contoh: ibu rumah tangga, pelajar" value="<%= produk && produk.targetPembeli ? produk.targetPembeli : '' %>">
+          <p class="pesan-error hidden" data-error="targetPembeli"></p>
+        </div>
+
+        <div class="flex flex-col gap-3 pt-2 sm:flex-row sm:flex-wrap">
+          <button type="button" class="btn-primary" data-aksi="caption">Buat Caption</button>
+          <button type="button" class="btn-ghost" data-aksi="simpan">Simpan Produk</button>
+          <a href="/" class="btn-ghost border-transparent">Kembali ke Beranda</a>
+        </div>
+      </form>
+
+      <!-- Tips mengisi -->
+      <aside class="h-fit rounded-2xl border border-garis bg-pucuk p-5 lg:sticky lg:top-6" aria-labelledby="judul-tips">
+        <h2 id="judul-tips" class="text-xl font-bold text-daun">Tips mengisi</h2>
+        <ul class="mt-4 space-y-3">
+          <li class="rounded-xl bg-white p-4 text-lumut">Tulis nama produk dengan jelas, termasuk jenis buah dan beratnya.</li>
+          <li class="rounded-xl bg-white p-4 text-lumut">Sebut 2-3 keunggulan, misalnya rasa, tekstur, dan bahan.</li>
+          <li class="rounded-xl bg-white p-4 text-lumut">Jelaskan siapa pembelinya agar gaya bahasa caption pas.</li>
+        </ul>
+      </aside>
+    </div>
+
+    <!-- Contoh pengisian -->
+    <section class="mt-14" aria-labelledby="judul-contoh">
+      <h2 id="judul-contoh" class="text-2xl font-extrabold tracking-tight text-daun">Contoh pengisian</h2>
+      <div class="mt-5 grid gap-5 sm:grid-cols-2">
+        <% [
+          { n: 'Kripik Apel Malang 100 g', k: 'renyah, manis alami, dari apel segar', t: 'ibu rumah tangga', gelap: true },
+          { n: 'Kripik Nangka 100 g', k: 'wangi, manis, tanpa pewarna tambahan', t: 'pekerja kantoran', gelap: false },
+          { n: 'Kripik Pisang 150 g', k: 'tipis, gurih, kemasan praktis', t: 'pelajar dan mahasiswa', gelap: false },
+          { n: 'Kripik Salak 100 g', k: 'rasa khas salak, tekstur renyah', t: 'pencari camilan unik', gelap: true }
+        ].forEach(function (c) { %>
+          <div class="rounded-2xl border border-garis p-6 <%= c.gelap ? 'bg-[#cfe6d8]' : 'bg-pucuk' %>">
+            <p class="text-lg font-bold text-daun"><%= c.n %></p>
+            <dl class="mt-3 space-y-1 text-lumut">
+              <div><dt class="inline font-semibold">Keunggulan:</dt> <dd class="inline"><%= c.k %></dd></div>
+              <div><dt class="inline font-semibold">Target:</dt> <dd class="inline"><%= c.t %></dd></div>
+            </dl>
+          </div>
+        <% }); %>
+      </div>
+    </section>
+  </main>
+
+  <script src="/js/produk-form.js"></script>
+<%- include('../partials/footer') %>

@@ -1,107 +1,146 @@
 <%- include('partials/head', { judul: judul }) %>
-<body class="bg-kabut text-tinta font-sans antialiased">
-
-  <a href="#konten"
-     class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-10 focus:bg-daun focus:text-white focus:px-4 focus:py-2 focus:rounded-lg">
-    Lewati ke konten utama
-  </a>
-
-  <header class="max-w-6xl mx-auto px-5 sm:px-8 py-5 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-    <a href="/" class="flex items-center gap-3 text-xl font-extrabold tracking-tight text-daun">
-      <svg viewBox="0 0 40 40" class="h-9 w-9" aria-hidden="true">
-        <circle cx="20" cy="20" r="20" fill="#1f6b45"/>
-        <ellipse cx="20" cy="17" rx="11" ry="7" fill="#f0bd3c" transform="rotate(-8 20 17)"/>
-        <path d="M8 20h24c0 7-5 11-12 11S8 27 8 20z" fill="#12372a"/>
-      </svg>
-      <%= namaToko %>
-    </a>
-    <nav class="flex flex-wrap gap-2" aria-label="Navigasi utama">
-      <a href="#produk" class="nav-link">Produk</a>
-      <a href="/api/produk" class="nav-link">API produk</a>
-      <a href="/api/status" class="nav-link">API status</a>
-    </nav>
-  </header>
+<body class="bg-kabut font-sans text-tinta antialiased">
+<%- include('partials/header') %>
+<% const pemilik = user.role === 'pemilik'; %>
 
   <main id="konten">
     <!-- Hero -->
-    <section class="max-w-6xl mx-auto px-5 sm:px-8 pt-8 pb-16 grid lg:grid-cols-2 gap-10 lg:gap-14 items-center">
-      <div>
-        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.05] tracking-tight text-daun">
-          Kripik buah khas Malang, renyah dari kebun.
-        </h1>
-        <p class="mt-5 text-lg text-lumut max-w-lg">
-          KripikPintar adalah katalog usaha kripik buah rumahan. Daftar produk di bawah diambil dari server
-          lewat API yang bisa kamu buka langsung.
-        </p>
-        <div class="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-          <a href="#produk" class="btn-primary">Lihat produk</a>
-          <a href="/api/produk" class="btn-ghost">API produk</a>
-          <a href="/api/status" class="btn-ghost">API status</a>
+    <section class="mx-auto grid max-w-6xl items-stretch gap-10 px-5 pb-14 pt-6 sm:px-8 lg:grid-cols-2 lg:gap-14">
+      <div class="flex flex-col justify-between gap-8">
+        <div>
+          <h1 class="text-4xl font-extrabold leading-[1.05] tracking-tight text-daun sm:text-5xl lg:text-6xl">
+            <%= pemilik ? 'Kelola produk dan buat caption dalam sekali klik.' : 'Kripik buah khas Malang, renyah dari kebun.' %>
+          </h1>
+          <p class="mt-5 max-w-lg text-lg text-lumut">
+            <% if (pemilik) { %>
+              Halo, <%= user.username %>. Tambah, ubah, atau hapus produk, lalu buat caption promosinya dengan bantuan AI.
+            <% } else { %>
+              Halo, <%= user.username %>. Pilih kripik favoritmu, masukkan ke keranjang, lalu pesan lewat WhatsApp.
+            <% } %>
+          </p>
+        </div>
+        <div class="flex flex-col gap-3 sm:flex-row">
+          <% if (pemilik) { %>
+            <a href="/produk/baru" class="btn-primary">Buat Caption Baru</a>
+            <a href="#produk" class="btn-ghost">Lihat Produk</a>
+          <% } else { %>
+            <a href="#produk" class="btn-primary">Lihat Produk</a>
+            <button type="button" data-buka-chatbot class="btn-ghost">Tanya Chatbot</button>
+          <% } %>
         </div>
       </div>
 
-      <!-- Respons asli dari /api/status -->
-      <div class="rounded-2xl bg-daun text-pucuk p-5 sm:p-6 font-mono text-sm shadow-xl">
-        <div class="flex flex-wrap items-center justify-between gap-2">
-          <span class="font-semibold">GET /api/status</span>
-          <span class="flex items-center gap-2">
-            <span id="status-dot" class="h-2.5 w-2.5 rounded-full bg-pucuk/40"></span>
-            <span id="status-label">Menghubungi server</span>
-          </span>
-        </div>
-        <pre id="status-output" class="mt-4 whitespace-pre-wrap break-words text-emas min-h-[9rem]" aria-live="polite">...</pre>
+      <div class="flex min-h-[16rem] items-center justify-center rounded-3xl border border-garis bg-pucuk p-8">
+        <svg viewBox="0 0 320 240" class="w-full max-w-sm" role="img" aria-label="Ilustrasi mangkuk berisi kripik renyah dengan daun hijau">
+          <circle cx="160" cy="120" r="108" fill="#d2e3d8"/>
+          <path d="M214 46c30 4 50 24 54 52-30-2-52-20-54-52z" fill="#2a8a58"/>
+          <path d="M214 46c14 18 30 34 54 52" fill="none" stroke="#1f6b45" stroke-width="3" stroke-linecap="round"/>
+          <g fill="#f0bd3c" stroke="#d99a1e" stroke-width="3">
+            <ellipse cx="108" cy="124" rx="38" ry="24" transform="rotate(-18 108 124)"/>
+            <ellipse cx="170" cy="104" rx="40" ry="25" transform="rotate(10 170 104)"/>
+            <ellipse cx="222" cy="128" rx="36" ry="23" transform="rotate(24 222 128)"/>
+            <ellipse cx="160" cy="134" rx="38" ry="24" transform="rotate(-6 160 134)"/>
+          </g>
+          <path d="M52 142h216c0 56-40 88-108 88S52 198 52 142z" fill="#1f6b45"/>
+          <path d="M52 142h216" stroke="#12372a" stroke-width="6" stroke-linecap="round"/>
+          <path d="M92 176c18 18 44 26 68 26" fill="none" stroke="#2a8a58" stroke-width="5" stroke-linecap="round"/>
+        </svg>
       </div>
     </section>
 
-    <!-- Produk -->
-    <section id="produk" class="max-w-6xl mx-auto px-5 sm:px-8 pb-20 scroll-mt-6" aria-labelledby="judul-produk">
+    <!-- Daftar produk (dari database) -->
+    <section id="produk" class="mx-auto max-w-6xl scroll-mt-6 px-5 pb-16 sm:px-8" aria-labelledby="judul-produk">
       <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h2 id="judul-produk" class="text-3xl font-extrabold tracking-tight text-daun">Produk minggu ini</h2>
-          <p class="mt-2 text-lumut">
-            <%= produk.length %> produk dari <code class="font-mono text-sm">models/produkModel.js</code>
-          </p>
+          <h2 id="judul-produk" class="text-3xl font-extrabold tracking-tight text-daun">Produk Kami</h2>
+          <p class="mt-2 text-lumut"><%= produk.length %> produk dari database</p>
         </div>
-        <a href="/api/produk" class="font-semibold text-hutan underline underline-offset-4 hover:text-daun">Lihat data JSON</a>
+        <% if (pemilik) { %>
+          <a href="/produk/baru" class="btn-ghost">+ Tambah Produk</a>
+        <% } %>
       </div>
 
-      <ul class="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        <% produk.forEach(function (p) { %>
-          <li class="flex flex-col rounded-2xl border border-garis bg-white p-6">
-            <span class="self-start rounded-full bg-pucuk px-3 py-1 text-xs font-bold text-hutan"><%= p.kategori %></span>
-            <h3 class="mt-4 text-xl font-bold text-daun"><%= p.nama %></h3>
-            <p class="mt-2 flex-1 text-lumut"><%= p.deskripsi %></p>
-            <div class="mt-6 flex items-end justify-between gap-3">
-              <p class="text-xl font-extrabold text-daun"><%= p.hargaFormat %></p>
-              <p class="text-sm font-semibold <%= p.stok < 15 ? 'text-bata' : 'text-lumut' %>">
-                <%= p.stok < 15 ? 'Stok menipis: ' : 'Stok ' %><%= p.stok %>
-              </p>
-            </div>
-          </li>
-        <% }); %>
-      </ul>
+      <% if (!produk.length) { %>
+        <div class="mt-8 rounded-2xl border border-dashed border-garis bg-white p-10 text-center text-lumut">
+          Belum ada produk.<% if (pemilik) { %> Tekan &quot;+ Tambah Produk&quot; untuk memulai.<% } %>
+        </div>
+      <% } else { %>
+        <ul class="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <% produk.forEach(function (p) { %>
+            <li class="flex flex-col overflow-hidden rounded-2xl border border-garis bg-white">
+              <div class="aspect-[4/3] w-full overflow-hidden bg-pucuk">
+                <% if (p.foto) { %>
+                  <img src="<%= p.foto %>" alt="<%= p.nama %>" class="h-full w-full object-cover" loading="lazy">
+                <% } else { %>
+                  <%- include('partials/placeholder') %>
+                <% } %>
+              </div>
+              <div class="flex flex-1 flex-col p-5">
+                <h3 class="text-xl font-bold text-daun"><%= p.nama %></h3>
+                <p class="mt-2 flex-1 text-lumut"><%= p.deskripsi || p.keunggulan || '' %></p>
+                <div class="mt-5 flex items-end justify-between gap-3">
+                  <p class="text-xl font-extrabold text-daun"><%= p.hargaFormat %></p>
+                  <% if (p.stok < 1) { %>
+                    <p class="text-sm font-semibold text-bata">Stok habis</p>
+                  <% } else if (p.stok < 15) { %>
+                    <p class="text-sm font-semibold text-bata">Stok menipis: <%= p.stok %></p>
+                  <% } else { %>
+                    <p class="text-sm font-semibold text-lumut">Stok <%= p.stok %></p>
+                  <% } %>
+                </div>
+
+                <% if (pemilik) { %>
+                  <a href="/produk/<%= p.id %>/caption" class="btn-primary mt-4">Buat Caption</a>
+                  <div class="mt-3 grid grid-cols-2 gap-3">
+                    <a href="/produk/<%= p.id %>/edit" class="btn-ghost btn-kecil">Edit</a>
+                    <button type="button" class="btn-bahaya btn-kecil" data-hapus="<%= p.id %>" data-nama="<%= p.nama %>">Hapus</button>
+                  </div>
+                <% } else { %>
+                  <button type="button" class="btn-primary mt-4" data-tambah="<%= p.id %>" <%= p.stok < 1 ? 'disabled' : '' %>>
+                    <%= p.stok < 1 ? 'Stok habis' : '+ Keranjang' %>
+                  </button>
+                <% } %>
+              </div>
+            </li>
+          <% }); %>
+        </ul>
+      <% } %>
+    </section>
+
+    <!-- Ajakan pesan lewat WhatsApp -->
+    <section class="mx-auto max-w-6xl px-5 pb-16 sm:px-8">
+      <div class="rounded-3xl bg-daun p-8 text-center text-white sm:p-12">
+        <h2 class="text-3xl font-extrabold tracking-tight">Ingin memesan kripik?</h2>
+        <p class="mx-auto mt-3 max-w-xl text-pucuk">Hubungi kami lewat WhatsApp untuk pemesanan, ongkir, dan pertanyaan lainnya.</p>
+        <a href="https://wa.me/<%= whatsappNomor %>?text=<%= encodeURIComponent('Halo, saya ingin memesan kripik dari KripikPintar.') %>"
+           target="_blank" rel="noopener"
+           class="btn mt-6 bg-emas text-daun hover:bg-yellow-300">Pesan via WhatsApp</a>
+      </div>
+    </section>
+
+    <!-- Tentang kami -->
+    <section class="mx-auto max-w-6xl px-5 pb-20 sm:px-8" aria-labelledby="judul-tentang">
+      <div class="grid items-center gap-8 md:grid-cols-2">
+        <div class="aspect-[4/3] overflow-hidden rounded-3xl border border-garis">
+          <%- include('partials/placeholder') %>
+        </div>
+        <div>
+          <h2 id="judul-tentang" class="text-3xl font-extrabold tracking-tight text-daun">Tentang kami</h2>
+          <p class="mt-4 text-lg text-lumut">
+            KripikPintar adalah usaha keluarga di Malang yang mengolah buah-buahan segar menjadi kripik renyah.
+            Setiap kemasan dibuat dengan sepenuh hati, dan kini pemesanannya jadi lebih mudah dengan bantuan teknologi.
+          </p>
+        </div>
+      </div>
     </section>
   </main>
 
-  <script>
-    // Ambil data asli dari endpoint /api/status
-    (async function () {
-      const dot = document.getElementById('status-dot');
-      const label = document.getElementById('status-label');
-      const output = document.getElementById('status-output');
-      try {
-        const res = await fetch('/api/status');
-        if (!res.ok) throw new Error('HTTP ' + res.status);
-        const data = await res.json();
-        output.textContent = JSON.stringify(data, null, 2);
-        dot.className = 'h-2.5 w-2.5 rounded-full bg-emerald-400';
-        label.textContent = 'Terhubung';
-      } catch (err) {
-        output.textContent = 'Gagal memuat status: ' + err.message;
-        dot.className = 'h-2.5 w-2.5 rounded-full bg-red-400';
-        label.textContent = 'Gagal';
-      }
-    })();
-  </script>
+  <% if (pemilik) { %>
+    <script src="/js/beranda-pemilik.js"></script>
+  <% } else { %>
+    <script type="application/json" id="data-produk"><%- JSON.stringify(produk.map(function (p) { return { id: p.id, nama: p.nama, harga: p.harga, stok: p.stok }; })).replace(/</g, '\\u003c') %></script>
+    <%- include('partials/keranjang') %>
+    <%- include('partials/chatbot') %>
+  <% } %>
 
-<%- include('partials/footer', { namaToko: namaToko }) %>
+<%- include('partials/footer') %>
