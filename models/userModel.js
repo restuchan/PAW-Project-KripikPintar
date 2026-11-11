@@ -1,4 +1,4 @@
-const { DataTypes } = require('sequelize');
+const { DataTypes, Op } = require('sequelize');
 const bcrypt = require('bcryptjs');
 const sequelize = require('../config/database');
 
@@ -26,6 +26,24 @@ User.cariByUsername = function (username) {
 User.buat = async function ({ username, password, role }) {
   const hash = await bcrypt.hash(password, 10);
   return this.create({ username, password: hash, role });
+};
+
+// Memastikan HANYA ada satu akun pemilik, sesuai username dan password di .env.
+// - akun pemilik lain dihapus
+// - jika username sudah ada tetapi password beda, password diperbarui
+// Mengembalikan 'dibuat', 'diperbarui', atau 'tetap'.
+User.pastikanPemilik = async function (username, password) {
+  await this.destroy({ where: { role: 'pemilik', username: { [Op.ne]: username } } });
+
+  const ada = await this.findOne({ where: { username } });
+  if (!ada) {
+    await this.buat({ username, password, role: 'pemilik' });
+    return 'dibuat';
+  }
+  if (ada.role === 'pemilik' && (await ada.cocokPassword(password))) return 'tetap';
+
+  await ada.update({ role: 'pemilik', password: await bcrypt.hash(password, 10) });
+  return 'diperbarui';
 };
 
 User.prototype.cocokPassword = function (passwordAsli) {

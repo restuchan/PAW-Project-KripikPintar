@@ -61,14 +61,25 @@ function jelaskanError(err) {
 
 async function mulai() {
   try {
+    if (!config.pemilik.username || !config.pemilik.password) {
+      throw new Error('OWNER_USERNAME dan OWNER_PASSWORD belum diisi di file .env (lihat .env.example)');
+    }
+
     await sequelize.authenticate();
     console.log('Koneksi database berhasil');
 
     await sequelize.sync(); // membuat tabel jika belum ada
     console.log('Tabel database siap');
 
-    // Database baru dan masih kosong: isi data awal supaya langsung bisa diuji
-    if ((await User.count()) === 0) await jalankanSeed();
+    // Database baru (belum ada akun sama sekali) -> nanti diisi data awal
+    const databaseBaru = (await User.count()) === 0;
+
+    // Akun pemilik selalu disamakan dengan .env: dibuat jika belum ada,
+    // password diperbarui jika berubah, dan akun pemilik lain dihapus
+    const status = await User.pastikanPemilik(config.pemilik.username, config.pemilik.password);
+    console.log(`Akun pemilik siap: ${config.pemilik.username} (${status})`);
+
+    if (databaseBaru) await jalankanSeed();
 
     app.listen(config.port, () => {
       console.log(`Server jalan di http://localhost:${config.port}`);

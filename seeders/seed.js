@@ -1,5 +1,6 @@
-// Mengisi data awal: 2 akun contoh dan 9 produk kripik.
+// Mengisi data awal: 1 akun pembeli contoh dan 9 produk kripik.
 // Dijalankan otomatis saat database masih kosong, atau manual: npm run seed
+const config = require('../config');
 const { sequelize, User, Produk } = require('../models');
 
 const produkAwal = [
@@ -15,20 +16,21 @@ const produkAwal = [
 ];
 
 async function jalankanSeed() {
-  let pemilik = await User.cariByUsername('pemilik');
-  if (!pemilik) pemilik = await User.buat({ username: 'pemilik', password: 'pemilik123', role: 'pemilik' });
+  // Akun pemilik sudah dibuat dari .env (lihat User.pastikanPemilik di app.js)
+  const pemilik = await User.findOne({ where: { role: 'pemilik' } });
+
   if (!(await User.cariByUsername('pembeli'))) {
     await User.buat({ username: 'pembeli', password: 'pembeli123', role: 'pembeli' });
   }
 
   if ((await Produk.count()) === 0) {
-    await Produk.bulkCreate(produkAwal.map((p) => ({ ...p, kategori: 'Kripik buah', userId: pemilik.id })));
+    await Produk.bulkCreate(produkAwal.map((p) => ({ ...p, kategori: 'Kripik buah', userId: pemilik ? pemilik.id : null })));
     console.log(`Data awal: ${produkAwal.length} produk ditambahkan`);
   } else {
     console.log('Data awal: tabel produk sudah berisi, dilewati');
   }
 
-  console.log('Akun contoh -> pemilik / pemilik123 dan pembeli / pembeli123');
+  console.log('Akun pembeli contoh -> pembeli / pembeli123');
 }
 
 module.exports = { jalankanSeed };
@@ -39,6 +41,10 @@ if (require.main === module) {
     try {
       await sequelize.authenticate();
       await sequelize.sync();
+      if (!config.pemilik.username || !config.pemilik.password) {
+        throw new Error('OWNER_USERNAME dan OWNER_PASSWORD belum diisi di file .env');
+      }
+      await User.pastikanPemilik(config.pemilik.username, config.pemilik.password);
       await jalankanSeed();
       process.exit(0);
     } catch (err) {
