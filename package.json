@@ -1,15 +1,23 @@
 {
   "name": "paw-project-kripikpintar",
-  "version": "1.0.0",
-  "description": "KripikPintar: katalog usaha kripik buah dengan Express.js (MVC), EJS, dan Tailwind CDN",
+  "version": "1.1.0",
+  "description": "KripikPintar: katalog kripik buah dengan Express.js (MVC), EJS, Tailwind CDN, PostgreSQL (Sequelize), dan CRUD produk",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "dev": "node --watch app.js"
+    "dev": "node --watch app.js",
+    "seed": "node seeders/seed.js"
   },
   "author": "Restu Chandra Fitrianto",
   "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "dotenv": "^18.0.9",
     "ejs": "^3.1.10",
-    "express": "^4.21.2"
+    "express": "^4.22.3",
+    "express-session": "^1.19.0",
+    "multer": "^2.5.0",
+    "pg": "^8.23.1",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.37.8"
   }
 }
