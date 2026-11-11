@@ -1,0 +1,76 @@
+<%- include('../partials/head', { judul: judul }) %>
+<body class="bg-kabut font-sans text-tinta antialiased">
+<%- include('../partials/header') %>
+
+  <main id="konten" class="mx-auto max-w-6xl px-5 pb-20 sm:px-8" data-produk-id="<%= produk.id %>">
+    <p class="text-sm text-lumut">
+      <a href="/" class="font-semibold text-hutan underline underline-offset-4">Beranda</a> &rsaquo;
+      <a href="/produk/<%= produk.id %>/edit" class="font-semibold text-hutan underline underline-offset-4">Data Produk</a> &rsaquo;
+      <span aria-current="page">Hasil Caption</span>
+    </p>
+    <h1 class="mt-3 text-4xl font-extrabold tracking-tight text-daun">Hasil Caption</h1>
+    <p class="mt-2 text-lg text-lumut">Baca, edit bila perlu, lalu salin atau simpan.</p>
+
+    <div class="mt-8 grid gap-8 lg:grid-cols-12">
+      <!-- Preview produk -->
+      <aside class="h-fit rounded-2xl border border-garis bg-white p-5 lg:col-span-5" aria-labelledby="judul-preview">
+        <h2 id="judul-preview" class="text-xl font-bold text-daun">Preview produk</h2>
+        <div class="mt-4 aspect-[16/9] overflow-hidden rounded-xl">
+          <% if (produk.foto) { %>
+            <img src="<%= produk.foto %>" alt="<%= produk.nama %>" class="h-full w-full object-cover">
+          <% } else { %>
+            <%- include('../partials/placeholder') %>
+          <% } %>
+        </div>
+        <dl class="mt-4 space-y-3">
+          <div class="rounded-xl bg-kabut px-4 py-3"><dt class="text-sm font-semibold text-lumut">Nama produk</dt><dd class="font-bold text-daun"><%= produk.nama %></dd></div>
+          <div class="rounded-xl bg-kabut px-4 py-3"><dt class="text-sm font-semibold text-lumut">Harga</dt><dd class="font-bold text-daun"><%= produk.hargaFormat %></dd></div>
+          <div class="rounded-xl bg-kabut px-4 py-3"><dt class="text-sm font-semibold text-lumut">Keunggulan</dt><dd class="text-tinta"><%= produk.keunggulan || '-' %></dd></div>
+          <div class="rounded-xl bg-kabut px-4 py-3"><dt class="text-sm font-semibold text-lumut">Target pembeli</dt><dd class="text-tinta"><%= produk.targetPembeli || '-' %></dd></div>
+        </dl>
+        <a href="/produk/<%= produk.id %>/edit" class="mt-4 inline-flex min-h-[2.75rem] items-center font-semibold text-hutan underline underline-offset-4">&larr; Ubah Data Produk</a>
+      </aside>
+
+      <!-- Caption -->
+      <section class="lg:col-span-7" aria-labelledby="judul-caption">
+        <h2 id="judul-caption" class="sr-only">Caption</h2>
+        <label for="caption-teks" class="label">Caption (bisa diedit)</label>
+        <textarea id="caption-teks" rows="12" class="kolom" placeholder="Caption akan muncul di sini..." disabled></textarea>
+        <p id="caption-status" role="status" class="mt-2 min-h-[1.5rem] text-sm font-semibold text-hutan">Menyusun caption...</p>
+
+        <div id="caption-galat" class="hidden rounded-xl border border-bata bg-red-50 p-4 text-sm font-semibold text-bata">
+          Caption belum berhasil dibuat. Silakan coba lagi.
+          <button type="button" id="tombol-coba" class="ml-2 underline underline-offset-4">Coba Lagi</button>
+        </div>
+
+        <div class="mt-3 grid grid-cols-2 gap-3">
+          <button type="button" id="tombol-salin" class="btn-primary" disabled>Salin Caption</button>
+          <button type="button" id="tombol-ulang" class="btn-ghost" disabled>Buat Ulang</button>
+        </div>
+        <button type="button" id="tombol-simpan" class="btn-primary mt-3 w-full bg-daun hover:bg-tinta" disabled>Simpan &amp; ke Beranda</button>
+      </section>
+    </div>
+
+    <!-- Riwayat -->
+    <section class="mt-14" aria-labelledby="judul-riwayat">
+      <h2 id="judul-riwayat" class="text-2xl font-extrabold tracking-tight text-daun">Riwayat caption</h2>
+      <% if (!riwayat.length) { %>
+        <p class="mt-4 rounded-2xl border border-dashed border-garis bg-white p-6 text-lumut">Belum ada caption tersimpan untuk produk ini.</p>
+      <% } else { %>
+        <ul class="mt-5 space-y-3">
+          <% riwayat.forEach(function (c) { %>
+            <li class="flex items-center justify-between gap-4 rounded-2xl border border-garis bg-white p-4">
+              <div class="min-w-0">
+                <p class="line-clamp-2 text-tinta"><%= c.teks %></p>
+                <p class="mt-1 text-sm text-lumut"><%= new Date(c.createdAt).toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short', timeZone: 'Asia/Jakarta' }) %></p>
+              </div>
+              <button type="button" class="btn-ghost btn-kecil shrink-0" data-lihat="<%= encodeURIComponent(c.teks) %>">Lihat</button>
+            </li>
+          <% }); %>
+        </ul>
+      <% } %>
+    </section>
+  </main>
+
+  <script src="/js/caption.js"></script>
+<%- include('../partials/footer') %>
