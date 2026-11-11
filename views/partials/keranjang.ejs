@@ -1,0 +1,52 @@
+<div id="keranjang-config" data-username="<%= user.username %>" data-wa="<%= whatsappNomor %>" hidden></div>
+<div id="keranjang-overlay" hidden class="fixed inset-0 z-40 bg-tinta/50"></div>
+
+<aside id="keranjang-panel" hidden aria-label="Keranjang belanja"
+       class="fixed inset-y-0 right-0 z-50 flex w-full max-w-md flex-col bg-white shadow-2xl">
+  <div class="flex items-center justify-between border-b border-garis px-5 py-4">
+    <h2 class="text-xl font-extrabold text-daun" id="keranjang-judul">Keranjang</h2>
+    <button type="button" id="keranjang-tutup" class="rounded-full p-2 hover:bg-pucuk focus-visible:outline focus-visible:outline-2 focus-visible:outline-segar" aria-label="Tutup keranjang">
+      <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+
+  <!-- Langkah 1: isi keranjang -->
+  <div id="langkah-keranjang" class="flex min-h-0 flex-1 flex-col">
+    <ul id="keranjang-daftar" class="flex-1 space-y-3 overflow-y-auto p-5"></ul>
+    <p id="keranjang-kosong" class="flex-1 p-8 text-center text-lumut" hidden>Keranjangmu masih kosong. Tekan &quot;+ Keranjang&quot; pada produk yang kamu mau.</p>
+    <div class="border-t border-garis p-5">
+      <div class="flex items-center justify-between text-lg font-extrabold text-daun">
+        <span>Subtotal</span><span id="keranjang-total">Rp 0</span>
+      </div>
+      <p class="mt-1 text-sm text-lumut">Belum termasuk ongkir. Pembayaran dan pengiriman disepakati lewat WhatsApp.</p>
+      <button type="button" id="tombol-lanjut" class="btn-primary mt-4 w-full" disabled>Lanjut ke Checkout</button>
+      <button type="button" id="tombol-kosongkan" class="mt-2 w-full min-h-[2.5rem] text-sm font-semibold text-bata underline underline-offset-4" hidden>Kosongkan keranjang</button>
+    </div>
+  </div>
+
+  <!-- Langkah 2: checkout -->
+  <form id="langkah-checkout" hidden class="flex min-h-0 flex-1 flex-col" novalidate>
+    <div class="flex-1 space-y-4 overflow-y-auto p-5">
+      <div id="checkout-ringkasan" class="rounded-xl bg-kabut p-4 text-sm text-lumut"></div>
+      <div>
+        <label for="co-nama" class="label">Nama penerima</label>
+        <input id="co-nama" type="text" class="kolom" required autocomplete="name">
+      </div>
+      <div>
+        <label for="co-alamat" class="label">Alamat pengiriman</label>
+        <textarea id="co-alamat" rows="3" class="kolom" required autocomplete="street-address" placeholder="Jalan, nomor rumah, kelurahan, kota"></textarea>
+      </div>
+      <div>
+        <label for="co-catatan" class="label">Catatan <span class="font-normal text-lumut">(opsional)</span></label>
+        <input id="co-catatan" type="text" class="kolom" placeholder="Contoh: tolong dikemas rapi">
+      </div>
+    </div>
+    <div class="border-t border-garis p-5">
+      <button type="submit" id="tombol-wa" class="btn-primary w-full" disabled>Pesan via WhatsApp</button>
+      <p class="mt-2 text-center text-sm text-lumut">Isi nama dan alamat untuk mengaktifkan tombol.</p>
+      <button type="button" id="tombol-kembali" class="btn-ghost mt-3 w-full">Kembali ke keranjang</button>
+    </div>
+  </form>
+</aside>
+
+<script src="/js/keranjang.js"></script>
