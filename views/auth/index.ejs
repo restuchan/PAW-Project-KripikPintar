@@ -56,9 +56,8 @@
           </div>
         </form>
         <p class="mt-6 rounded-xl bg-kabut p-4 text-sm text-lumut">
-          Akun contoh untuk uji coba:<br>
-          <strong>pemilik</strong> / pemilik123 (Pemilik Usaha)<br>
-          <strong>pembeli</strong> / pembeli123 (Pembeli)
+          Akun pembeli contoh untuk uji coba:<br>
+          <strong>pembeli</strong> / pembeli123
         </p>
       <% } else { %>
         <!-- DAFTAR -->
@@ -75,18 +74,11 @@
             <input id="daftar-password" name="password" type="password" class="kolom" required minlength="6" maxlength="72" autocomplete="new-password">
             <p class="mt-1.5 text-sm text-lumut">Minimal 6 karakter.</p>
           </div>
-          <div>
-            <label for="daftar-role" class="label">Daftar sebagai</label>
-            <select id="daftar-role" name="role" class="kolom" required>
-              <option value="" disabled <%= old.role ? '' : 'selected' %>>Pilih peran</option>
-              <option value="pemilik" <%= old.role === 'pemilik' ? 'selected' : '' %>>Pemilik Usaha</option>
-              <option value="pembeli" <%= old.role === 'pembeli' ? 'selected' : '' %>>Pembeli</option>
-            </select>
-          </div>
+          <p class="rounded-xl bg-kabut px-4 py-3 text-sm text-lumut">Akun baru otomatis terdaftar sebagai <strong>Pembeli</strong>. Akun Pemilik Usaha dikelola oleh sistem.</p>
 
           <div>
             <button type="submit" class="btn-primary w-full" data-tombol disabled>Daftar</button>
-            <p class="mt-2 text-center text-sm text-lumut">Isi semua kolom dengan benar untuk mengaktifkan tombol.</p>
+            <p class="mt-2 text-center text-sm text-lumut">Isi username dan password dengan benar untuk mengaktifkan tombol.</p>
           </div>
         </form>
       <% } %>

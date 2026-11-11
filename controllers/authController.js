@@ -26,20 +26,20 @@ exports.halamanDaftar = (req, res) => {
   return tampilkan(res, 200, 'daftar');
 };
 
-// POST /auth/register
+// POST /auth/register  -> pendaftaran HANYA untuk pembeli.
+// Akun pemilik tidak bisa dibuat lewat sini (dibuat sistem dari .env).
 exports.daftar = bungkus(async (req, res) => {
   const username = String(req.body.username || '').trim();
   const password = String(req.body.password || '');
-  const role = String(req.body.role || '');
+  const role = 'pembeli'; // dipaksa di server, apa pun yang dikirim klien
   const json = wantsJson(req);
 
   const gagal = (status, error) =>
-    json ? res.status(status).json({ sukses: false, pesan: error }) : tampilkan(res, status, 'daftar', { error, old: { username, role } });
+    json ? res.status(status).json({ sukses: false, pesan: error }) : tampilkan(res, status, 'daftar', { error, old: { username } });
 
-  if (!username || !password || !role) return gagal(400, 'Username, password, dan peran wajib diisi');
+  if (!username || !password) return gagal(400, 'Username dan password wajib diisi');
   if (!/^[A-Za-z0-9_]{3,20}$/.test(username)) return gagal(400, 'Username 3-20 karakter: huruf, angka, atau garis bawah');
   if (password.length < 6 || password.length > 72) return gagal(400, 'Password minimal 6 karakter');
-  if (!PERAN.includes(role)) return gagal(400, 'Peran tidak valid');
   if (await User.cariByUsername(username)) return gagal(409, 'Username sudah dipakai, coba yang lain');
 
   await User.buat({ username, password, role });
