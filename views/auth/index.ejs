@@ -1,0 +1,97 @@
+<%- include('../partials/head', { judul: judul }) %>
+<body class="bg-kabut font-sans text-tinta antialiased">
+<%- include('../partials/header', { tanpaNav: true }) %>
+
+  <main id="konten" class="mx-auto max-w-md px-5 pb-16 pt-4">
+    <div class="rounded-3xl border border-garis bg-white p-6 shadow-sm sm:p-8">
+      <h1 class="text-2xl font-extrabold text-daun">Selamat datang</h1>
+      <p class="mt-1 text-lumut">Masuk atau daftar untuk melanjutkan.</p>
+
+      <!-- Menu pilihan: Masuk / Daftar -->
+      <nav class="mt-6 grid grid-cols-2 rounded-full border border-garis bg-kabut p-1" aria-label="Pilihan Masuk atau Daftar">
+        <a href="/auth/login"
+           class="inline-flex min-h-[2.75rem] items-center justify-center rounded-full font-bold <%= aktif === 'masuk' ? 'bg-hutan text-white' : 'text-daun hover:bg-pucuk' %>"
+           <%- aktif === 'masuk' ? 'aria-current="page"' : '' %>>Masuk</a>
+        <a href="/auth/register"
+           class="inline-flex min-h-[2.75rem] items-center justify-center rounded-full font-bold <%= aktif === 'daftar' ? 'bg-hutan text-white' : 'text-daun hover:bg-pucuk' %>"
+           <%- aktif === 'daftar' ? 'aria-current="page"' : '' %>>Daftar</a>
+      </nav>
+
+      <% if (sukses) { %>
+        <p role="status" class="mt-5 rounded-xl border border-segar bg-pucuk px-4 py-3 text-sm font-semibold text-hutan"><%= sukses %></p>
+      <% } %>
+      <% if (error) { %>
+        <p role="alert" class="mt-5 rounded-xl border border-bata bg-red-50 px-4 py-3 text-sm font-semibold text-bata"><%= error %></p>
+      <% } %>
+
+      <% if (aktif === 'masuk') { %>
+        <!-- MASUK -->
+        <form action="/auth/login" method="post" data-validasi class="mt-6 space-y-5">
+          <fieldset>
+            <legend class="label">Masuk sebagai</legend>
+            <div class="grid grid-cols-2 gap-3">
+              <label class="relative cursor-pointer">
+                <input type="radio" name="role" value="pemilik" class="peer sr-only" required <%= old.role === 'pemilik' ? 'checked' : '' %>>
+                <span class="flex min-h-[3.5rem] items-center justify-center rounded-xl border-2 border-garis bg-white px-3 text-center font-semibold text-daun peer-checked:border-segar peer-checked:bg-pucuk peer-focus-visible:ring-4 peer-focus-visible:ring-segar/30">Pemilik Usaha</span>
+              </label>
+              <label class="relative cursor-pointer">
+                <input type="radio" name="role" value="pembeli" class="peer sr-only" required <%= old.role === 'pembeli' ? 'checked' : '' %>>
+                <span class="flex min-h-[3.5rem] items-center justify-center rounded-xl border-2 border-garis bg-white px-3 text-center font-semibold text-daun peer-checked:border-segar peer-checked:bg-pucuk peer-focus-visible:ring-4 peer-focus-visible:ring-segar/30">Pembeli</span>
+              </label>
+            </div>
+          </fieldset>
+
+          <div>
+            <label for="masuk-username" class="label">Username</label>
+            <input id="masuk-username" name="username" type="text" class="kolom" required autocomplete="username" value="<%= old.username || '' %>">
+          </div>
+          <div>
+            <label for="masuk-password" class="label">Password</label>
+            <input id="masuk-password" name="password" type="password" class="kolom" required autocomplete="current-password">
+          </div>
+
+          <div>
+            <button type="submit" class="btn-primary w-full" data-tombol disabled>Masuk</button>
+            <p class="mt-2 text-center text-sm text-lumut">Pilih peran dan isi semua kolom untuk mengaktifkan tombol.</p>
+          </div>
+        </form>
+        <p class="mt-6 rounded-xl bg-kabut p-4 text-sm text-lumut">
+          Akun contoh untuk uji coba:<br>
+          <strong>pemilik</strong> / pemilik123 (Pemilik Usaha)<br>
+          <strong>pembeli</strong> / pembeli123 (Pembeli)
+        </p>
+      <% } else { %>
+        <!-- DAFTAR -->
+        <form action="/auth/register" method="post" data-validasi class="mt-6 space-y-5">
+          <div>
+            <label for="daftar-username" class="label">Username</label>
+            <input id="daftar-username" name="username" type="text" class="kolom" required minlength="3" maxlength="20"
+                   pattern="[A-Za-z0-9_]{3,20}" title="3-20 karakter: huruf, angka, atau garis bawah"
+                   autocomplete="username" value="<%= old.username || '' %>">
+            <p class="mt-1.5 text-sm text-lumut">3-20 karakter: huruf, angka, atau garis bawah.</p>
+          </div>
+          <div>
+            <label for="daftar-password" class="label">Password</label>
+            <input id="daftar-password" name="password" type="password" class="kolom" required minlength="6" maxlength="72" autocomplete="new-password">
+            <p class="mt-1.5 text-sm text-lumut">Minimal 6 karakter.</p>
+          </div>
+          <div>
+            <label for="daftar-role" class="label">Daftar sebagai</label>
+            <select id="daftar-role" name="role" class="kolom" required>
+              <option value="" disabled <%= old.role ? '' : 'selected' %>>Pilih peran</option>
+              <option value="pemilik" <%= old.role === 'pemilik' ? 'selected' : '' %>>Pemilik Usaha</option>
+              <option value="pembeli" <%= old.role === 'pembeli' ? 'selected' : '' %>>Pembeli</option>
+            </select>
+          </div>
+
+          <div>
+            <button type="submit" class="btn-primary w-full" data-tombol disabled>Daftar</button>
+            <p class="mt-2 text-center text-sm text-lumut">Isi semua kolom dengan benar untuk mengaktifkan tombol.</p>
+          </div>
+        </form>
+      <% } %>
+    </div>
+  </main>
+
+  <script src="/js/auth.js"></script>
+<%- include('../partials/footer') %>
