@@ -12,11 +12,16 @@
   <div class="flex items-center justify-between bg-daun px-4 py-3 text-white">
     <div>
       <p class="font-bold">Asisten KripikPintar</p>
-      <p class="text-xs text-pucuk">Tanya harga, stok, rasa, atau cara pesan</p>
+      <p class="text-xs text-pucuk">Ditenagai Gemini &middot; tanya harga, stok, rasa, atau cara pesan</p>
     </div>
+    <div class="flex items-center gap-1">
+      <button type="button" id="chatbot-reset" class="rounded-full p-2 hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-emas" aria-label="Mulai percakapan baru" title="Mulai percakapan baru">
+        <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
+      </button>
     <button type="button" id="chatbot-tutup" class="rounded-full p-2 hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-emas" aria-label="Tutup chatbot">
       <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
     </button>
+    </div>
   </div>
 
   <div id="chatbot-pesan" class="flex-1 space-y-3 overflow-y-auto bg-kabut p-4" aria-live="polite"></div>
@@ -30,9 +35,9 @@
 
   <form id="chatbot-form" class="flex gap-2 bg-white p-4" autocomplete="off">
     <label for="chatbot-input" class="sr-only">Tulis pertanyaan</label>
-    <input id="chatbot-input" type="text" maxlength="200" placeholder="Tulis pertanyaanmu..."
+    <input id="chatbot-input" type="text" maxlength="300" placeholder="Tulis pertanyaanmu..."
            class="min-h-[2.75rem] flex-1 rounded-full border-2 border-[#9db8a8] px-4 text-base placeholder:text-lumut focus:border-segar focus:outline-none focus:ring-4 focus:ring-segar/20">
-    <button type="submit" class="btn-primary btn-kecil">Kirim</button>
+    <button type="submit" id="chatbot-kirim" class="btn-primary btn-kecil">Kirim</button>
   </form>
 </section>
 
