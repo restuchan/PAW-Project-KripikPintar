@@ -2,7 +2,7 @@ const express = require('express');
 const apiController = require('../controllers/apiController');
 const produkController = require('../controllers/produkController');
 const captionController = require('../controllers/captionController');
-const chatbotController = require('../controllers/chatbotController');
+const chatRoutes = require('./chat');
 const { wajibLogin, wajibPemilik } = require('../middlewares/authMiddleware');
 const { unggahFoto } = require('../middlewares/uploadMiddleware');
 
@@ -22,7 +22,7 @@ router.post('/produk/:id/caption/generate', wajibPemilik, captionController.gene
 router.get('/produk/:id/caption', wajibPemilik, captionController.riwayat);
 router.post('/produk/:id/caption', wajibPemilik, captionController.simpan);
 
-// Chatbot (pembeli yang sudah login)
-router.post('/chatbot', wajibLogin, chatbotController.jawab);
+// AI Assistant (Gemini): wajib login agar kuota API tidak disalahgunakan
+router.use('/chat', chatRoutes);
 
 module.exports = router;
