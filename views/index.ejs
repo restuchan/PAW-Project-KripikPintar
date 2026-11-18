@@ -3,23 +3,58 @@
 <%- include('partials/header') %>
 <% const pemilik = user.role === 'pemilik'; %>
 
+  <!-- Ikon doodle dekoratif (dipakai ulang lewat <use>) -->
+  <svg width="0" height="0" class="absolute" aria-hidden="true" focusable="false">
+    <symbol id="d-daun" viewBox="0 0 48 48">
+      <path d="M7 41C7 19 21 6 43 6c0 23-13 35-36 35z" fill="#58a94b" stroke="#1a1608" stroke-width="3" stroke-linejoin="round"/>
+      <path d="M7 41L31 17" fill="none" stroke="#1a1608" stroke-width="3" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="d-irisan" viewBox="0 0 48 48">
+      <circle cx="24" cy="24" r="20" fill="#fff8e4" stroke="#1a1608" stroke-width="3"/>
+      <circle cx="24" cy="24" r="12" fill="#f5b71c" stroke="#1a1608" stroke-width="3"/>
+      <circle cx="24" cy="24" r="3" fill="#1a1608"/>
+    </symbol>
+  </svg>
+
   <main id="konten">
     <!-- Hero -->
-    <section class="mx-auto grid max-w-6xl items-stretch gap-10 px-5 pb-14 pt-6 sm:px-8 lg:grid-cols-2 lg:gap-14">
-      <div class="flex flex-col justify-between gap-8">
-        <div>
-          <h1 class="text-4xl font-extrabold leading-[1.05] tracking-tight text-daun sm:text-5xl lg:text-6xl">
-            <%= pemilik ? 'Kelola produk dan buat caption dalam sekali klik.' : 'Kripik buah khas Malang, renyah dari kebun.' %>
-          </h1>
-          <p class="mt-5 max-w-lg text-lg text-lumut">
-            <% if (pemilik) { %>
-              Halo, <%= user.username %>. Tambah, ubah, atau hapus produk, lalu buat caption promosinya dengan bantuan AI.
+    <%
+      const heroFoto = produk.filter(function (p) { return p.foto; }).slice(0, 4);
+      const heroTile = heroFoto.length ? heroFoto : [null, null, null];
+      const heroGaya = ['-rotate-6 translate-y-6', 'rotate-3 -translate-y-2', '-rotate-3 translate-y-10', 'rotate-6 translate-y-1'];
+    %>
+    <section class="relative isolate overflow-hidden pb-16 pt-2 sm:pb-24">
+      <p aria-hidden="true" class="judul pointer-events-none absolute inset-x-0 top-2 -z-10 select-none text-center text-[19vw] leading-none text-daun">Kripik</p>
+
+      <svg class="absolute left-[6%] top-[34%] h-9 w-9 -rotate-12 sm:h-14 sm:w-14" aria-hidden="true"><use href="#d-daun"/></svg>
+      <svg class="absolute right-[7%] top-[12%] h-8 w-8 rotate-12 sm:h-12 sm:w-12" aria-hidden="true"><use href="#d-irisan"/></svg>
+      <svg class="absolute right-[10%] top-[48%] h-9 w-9 -scale-x-100 rotate-12 sm:h-14 sm:w-14" aria-hidden="true"><use href="#d-daun"/></svg>
+      <svg class="absolute left-[11%] top-[8%] h-7 w-7 sm:h-10 sm:w-10" aria-hidden="true"><use href="#d-irisan"/></svg>
+
+      <div class="mx-auto mt-[9vw] flex max-w-6xl items-end justify-center gap-2 px-5 sm:gap-6">
+        <% heroTile.forEach(function (p, i) { %>
+          <div class="aspect-square w-[20vw] max-w-[13rem] shrink-0 overflow-hidden rounded-2xl border-[3px] border-tinta bg-krim shadow-[0_10px_0_rgba(26,22,8,0.18)] sm:rounded-3xl <%= heroGaya[i % heroGaya.length] %>">
+            <% if (p) { %>
+              <img src="<%= p.foto %>" alt="" class="h-full w-full object-cover" aria-hidden="true">
             <% } else { %>
-              Halo, <%= user.username %>. Pilih kripik favoritmu, masukkan ke keranjang, lalu pesan lewat WhatsApp.
+              <%- include('partials/placeholder') %>
             <% } %>
-          </p>
-        </div>
-        <div class="flex flex-col gap-3 sm:flex-row">
+          </div>
+        <% }); %>
+      </div>
+
+      <div class="mx-auto mt-16 max-w-4xl px-5 text-center sm:mt-24 sm:px-8">
+        <h1 class="judul text-3xl text-hutan sm:text-5xl lg:text-6xl">
+          <%= pemilik ? 'Kelola produk dan buat caption dalam sekali klik.' : 'Kripik buah khas Malang, renyah dari kebun.' %>
+        </h1>
+        <p class="mx-auto mt-5 max-w-xl text-lg text-lumut">
+          <% if (pemilik) { %>
+            Halo, <%= user.username %>. Tambah, ubah, atau hapus produk, lalu buat caption promosinya dengan bantuan AI.
+          <% } else { %>
+            Halo, <%= user.username %>. Pilih kripik favoritmu, masukkan ke keranjang, lalu pesan lewat WhatsApp.
+          <% } %>
+        </p>
+        <div class="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
           <% if (pemilik) { %>
             <a href="/produk/baru" class="btn-primary">Buat Caption Baru</a>
             <a href="#produk" class="btn-ghost">Lihat Produk</a>
@@ -29,31 +64,15 @@
           <% } %>
         </div>
       </div>
-
-      <div class="flex min-h-[16rem] items-center justify-center rounded-3xl border border-garis bg-pucuk p-8">
-        <svg viewBox="0 0 320 240" class="w-full max-w-sm" role="img" aria-label="Ilustrasi mangkuk berisi kripik renyah dengan daun hijau">
-          <circle cx="160" cy="120" r="108" fill="#d2e3d8"/>
-          <path d="M214 46c30 4 50 24 54 52-30-2-52-20-54-52z" fill="#2a8a58"/>
-          <path d="M214 46c14 18 30 34 54 52" fill="none" stroke="#1f6b45" stroke-width="3" stroke-linecap="round"/>
-          <g fill="#f0bd3c" stroke="#d99a1e" stroke-width="3">
-            <ellipse cx="108" cy="124" rx="38" ry="24" transform="rotate(-18 108 124)"/>
-            <ellipse cx="170" cy="104" rx="40" ry="25" transform="rotate(10 170 104)"/>
-            <ellipse cx="222" cy="128" rx="36" ry="23" transform="rotate(24 222 128)"/>
-            <ellipse cx="160" cy="134" rx="38" ry="24" transform="rotate(-6 160 134)"/>
-          </g>
-          <path d="M52 142h216c0 56-40 88-108 88S52 198 52 142z" fill="#1f6b45"/>
-          <path d="M52 142h216" stroke="#12372a" stroke-width="6" stroke-linecap="round"/>
-          <path d="M92 176c18 18 44 26 68 26" fill="none" stroke="#2a8a58" stroke-width="5" stroke-linecap="round"/>
-        </svg>
-      </div>
     </section>
+    <div class="h-2 bg-segar" aria-hidden="true"></div>
 
     <!-- Daftar produk (dari database) -->
-    <section id="produk" class="mx-auto max-w-6xl scroll-mt-6 px-5 pb-16 sm:px-8" aria-labelledby="judul-produk">
-      <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+    <section id="produk" class="scroll-mt-6 pb-0 pt-14" aria-labelledby="judul-produk">
+      <div class="mx-auto flex max-w-7xl flex-col gap-3 px-5 sm:flex-row sm:items-end sm:justify-between sm:px-8">
         <div>
-          <h2 id="judul-produk" class="text-3xl font-extrabold tracking-tight text-daun">Produk Kami</h2>
-          <p class="mt-2 text-lumut"><%= produk.length %> produk dari database</p>
+          <h2 id="judul-produk" class="judul text-4xl text-hutan sm:text-5xl">Produk Kami</h2>
+          <p class="kecil-kap mt-3 text-lg text-lumut"><%= produk.length %> produk dari database</p>
         </div>
         <% if (pemilik) { %>
           <a href="/produk/baru" class="btn-ghost">+ Tambah Produk</a>
@@ -61,31 +80,41 @@
       </div>
 
       <% if (!produk.length) { %>
-        <div class="mt-8 rounded-2xl border border-dashed border-garis bg-white p-10 text-center text-lumut">
-          Belum ada produk.<% if (pemilik) { %> Tekan &quot;+ Tambah Produk&quot; untuk memulai.<% } %>
+        <div class="mx-auto mt-8 max-w-7xl px-5 pb-16 sm:px-8">
+          <div class="rounded-3xl border-2 border-dashed border-hutan/40 bg-krim p-10 text-center text-lumut">
+            Belum ada produk.<% if (pemilik) { %> Tekan &quot;+ Tambah Produk&quot; untuk memulai.<% } %>
+          </div>
         </div>
       <% } else { %>
-        <ul class="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          <% produk.forEach(function (p) { %>
-            <li class="flex flex-col overflow-hidden rounded-2xl border border-garis bg-white">
-              <div class="aspect-[4/3] w-full overflow-hidden bg-pucuk">
-                <% if (p.foto) { %>
-                  <img src="<%= p.foto %>" alt="<%= p.nama %>" class="h-full w-full object-cover" loading="lazy">
-                <% } else { %>
-                  <%- include('partials/placeholder') %>
-                <% } %>
-              </div>
-              <div class="flex flex-1 flex-col p-5">
-                <h3 class="text-xl font-bold text-daun"><%= p.nama %></h3>
-                <p class="mt-2 flex-1 text-lumut"><%= p.deskripsi || p.keunggulan || '' %></p>
-                <div class="mt-5 flex items-end justify-between gap-3">
-                  <p class="text-xl font-extrabold text-daun"><%= p.hargaFormat %></p>
-                  <% if (p.stok < 1) { %>
-                    <p class="text-sm font-semibold text-bata">Stok habis</p>
-                  <% } else if (p.stok < 15) { %>
-                    <p class="text-sm font-semibold text-bata">Stok menipis: <%= p.stok %></p>
+        <% const warna = ['bg-rasa1', 'bg-rasa2', 'bg-rasa3', 'bg-rasa4']; %>
+        <ul class="mt-10 grid sm:grid-cols-2 lg:grid-cols-4">
+          <% produk.forEach(function (p, i) { %>
+            <li class="relative flex flex-col overflow-hidden px-6 pb-8 pt-6 <%= warna[i % 4] %>">
+              <p class="kecil-kap text-base text-tinta">Rasa <%= String(i + 1).padStart(2, '0') %></p>
+
+              <div class="relative mx-auto mt-5 w-full max-w-[16rem]">
+                <svg class="absolute -left-3 -top-4 z-10 h-8 w-8 sm:-left-4 sm:h-10 sm:w-10" aria-hidden="true"><use href="#d-irisan"/></svg>
+                <svg class="absolute -right-3 top-1/2 z-10 h-9 w-9 rotate-12 sm:-right-4 sm:h-11 sm:w-11 <%= i % 2 ? '-scale-x-100' : '' %>" aria-hidden="true"><use href="#d-daun"/></svg>
+                <div class="aspect-square w-full overflow-hidden rounded-3xl border-[3px] border-tinta bg-krim shadow-[0_10px_0_rgba(26,22,8,0.18)] <%= i % 2 ? 'rotate-2' : '-rotate-2' %>">
+                  <% if (p.foto) { %>
+                    <img src="<%= p.foto %>" alt="<%= p.nama %>" class="h-full w-full object-cover" loading="lazy">
                   <% } else { %>
-                    <p class="text-sm font-semibold text-lumut">Stok <%= p.stok %></p>
+                    <%- include('partials/placeholder') %>
+                  <% } %>
+                </div>
+              </div>
+
+              <div class="mt-8 flex flex-1 flex-col">
+                <h3 class="judul break-words text-2xl text-hutan"><%= p.nama %></h3>
+                <p class="mt-3 flex-1 text-base text-tinta/80"><%= p.deskripsi || p.keunggulan || '' %></p>
+                <div class="mt-5 flex flex-wrap items-end justify-between gap-3">
+                  <p class="judul text-2xl text-hutan"><%= p.hargaFormat %></p>
+                  <% if (p.stok < 1) { %>
+                    <p class="kecil-kap rounded-full bg-bata px-3 py-1 text-sm text-white">Stok habis</p>
+                  <% } else if (p.stok < 15) { %>
+                    <p class="kecil-kap rounded-full bg-tinta px-3 py-1 text-sm text-krim">Stok menipis: <%= p.stok %></p>
+                  <% } else { %>
+                    <p class="kecil-kap text-sm text-tinta">Stok <%= p.stok %></p>
                   <% } %>
                 </div>
 
@@ -93,7 +122,7 @@
                   <a href="/produk/<%= p.id %>/caption" class="btn-primary mt-4">Buat Caption</a>
                   <div class="mt-3 grid grid-cols-2 gap-3">
                     <a href="/produk/<%= p.id %>/edit" class="btn-ghost btn-kecil">Edit</a>
-                    <button type="button" class="btn-bahaya btn-kecil" data-hapus="<%= p.id %>" data-nama="<%= p.nama %>">Hapus</button>
+                    <button type="button" class="btn-bahaya btn-kecil bg-krim/60" data-hapus="<%= p.id %>" data-nama="<%= p.nama %>">Hapus</button>
                   </div>
                 <% } else { %>
                   <button type="button" class="btn-primary mt-4" data-tambah="<%= p.id %>" <%= p.stok < 1 ? 'disabled' : '' %>>
@@ -108,25 +137,29 @@
     </section>
 
     <!-- Ajakan pesan lewat WhatsApp -->
-    <section class="mx-auto max-w-6xl px-5 pb-16 sm:px-8">
-      <div class="rounded-3xl bg-daun p-8 text-center text-white sm:p-12">
-        <h2 class="text-3xl font-extrabold tracking-tight">Ingin memesan kripik?</h2>
-        <p class="mx-auto mt-3 max-w-xl text-pucuk">Hubungi kami lewat WhatsApp untuk pemesanan, ongkir, dan pertanyaan lainnya.</p>
+    <section class="relative isolate overflow-hidden bg-daun px-5 py-20 text-center text-krim sm:px-8 sm:py-28">
+      <svg class="absolute left-[7%] top-[14%] h-10 w-10 -rotate-12 sm:h-16 sm:w-16" aria-hidden="true"><use href="#d-daun"/></svg>
+      <svg class="absolute right-[8%] top-[10%] h-9 w-9 rotate-12 sm:h-14 sm:w-14" aria-hidden="true"><use href="#d-irisan"/></svg>
+      <svg class="absolute bottom-[12%] left-[10%] h-9 w-9 sm:h-12 sm:w-12" aria-hidden="true"><use href="#d-irisan"/></svg>
+      <svg class="absolute bottom-[14%] right-[9%] h-10 w-10 -scale-x-100 rotate-12 sm:h-16 sm:w-16" aria-hidden="true"><use href="#d-daun"/></svg>
+      <div class="relative mx-auto max-w-4xl">
+        <h2 class="judul text-4xl sm:text-6xl lg:text-7xl">Ingin memesan kripik?</h2>
+        <p class="mx-auto mt-6 max-w-xl text-lg text-pucuk">Hubungi kami lewat WhatsApp untuk pemesanan, ongkir, dan pertanyaan lainnya.</p>
         <a href="https://wa.me/<%= whatsappNomor %>?text=<%= encodeURIComponent('Halo, saya ingin memesan kripik dari KripikPintar.') %>"
            target="_blank" rel="noopener"
-           class="btn mt-6 bg-emas text-daun hover:bg-yellow-300">Pesan via WhatsApp</a>
+           class="btn mt-8 min-h-[3.5rem] border-krim bg-krim px-9 text-xl text-daun hover:bg-emas hover:border-emas">Pesan via WhatsApp</a>
       </div>
     </section>
 
     <!-- Tentang kami -->
-    <section class="mx-auto max-w-6xl px-5 pb-20 sm:px-8" aria-labelledby="judul-tentang">
-      <div class="grid items-center gap-8 md:grid-cols-2">
-        <div class="aspect-[4/3] overflow-hidden rounded-3xl border border-garis">
+    <section class="mx-auto max-w-7xl px-5 py-20 sm:px-8" aria-labelledby="judul-tentang">
+      <div class="grid items-center gap-12 md:grid-cols-2">
+        <div class="aspect-[4/3] -rotate-2 overflow-hidden rounded-3xl border-[3px] border-tinta shadow-[8px_8px_0_#1a1608]">
           <%- include('partials/placeholder') %>
         </div>
         <div>
-          <h2 id="judul-tentang" class="text-3xl font-extrabold tracking-tight text-daun">Tentang kami</h2>
-          <p class="mt-4 text-lg text-lumut">
+          <h2 id="judul-tentang" class="judul text-4xl text-hutan sm:text-5xl">Tentang kami</h2>
+          <p class="mt-5 text-lg text-lumut">
             KripikPintar adalah usaha keluarga di Malang yang mengolah buah-buahan segar menjadi kripik renyah.
             Setiap kemasan dibuat dengan sepenuh hati, dan kini pemesanannya jadi lebih mudah dengan bantuan teknologi.
           </p>

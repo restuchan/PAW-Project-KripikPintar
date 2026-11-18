@@ -3,19 +3,19 @@
 <%- include('../partials/header') %>
 <% const ubah = mode === 'ubah'; %>
 
-  <main id="konten" class="mx-auto max-w-6xl px-5 pb-20 sm:px-8">
-    <p class="text-sm text-lumut">
-      <a href="/" class="font-semibold text-hutan underline underline-offset-4">Beranda</a> &rsaquo;
+  <main id="konten" class="mx-auto max-w-7xl px-5 pb-24 sm:px-8">
+    <p class="kecil-kap text-base text-lumut">
+      <a href="/" class="text-hutan underline decoration-2 underline-offset-4">Beranda</a> &rsaquo;
       <span aria-current="page"><%= ubah ? 'Ubah Produk' : 'Data Produk' %></span>
     </p>
-    <h1 class="mt-3 text-4xl font-extrabold tracking-tight text-daun"><%= ubah ? 'Ubah Produk' : 'Data Produk' %></h1>
-    <p class="mt-2 text-lg text-lumut">Isi data produk kripikmu, lalu simpan atau langsung buat caption promosinya.</p>
+    <h1 class="judul mt-4 text-4xl text-hutan sm:text-6xl"><%= ubah ? 'Ubah Produk' : 'Data Produk' %></h1>
+    <p class="mt-4 max-w-2xl text-lg text-lumut">Isi data produk kripikmu, lalu simpan atau langsung buat caption promosinya.</p>
 
-    <div class="mt-8 grid gap-8 lg:grid-cols-3">
+    <div class="mt-10 grid gap-8 lg:grid-cols-3">
       <!-- Form -->
-      <form id="form-produk" class="space-y-5 lg:col-span-2" novalidate
+      <form id="form-produk" class="space-y-5 rounded-3xl border-[3px] border-tinta bg-krim p-6 shadow-[8px_8px_0_#1a1608] sm:p-8 lg:col-span-2" novalidate
             data-mode="<%= mode %>" data-id="<%= produk ? produk.id : '' %>">
-        <p id="form-error" role="alert" class="hidden rounded-xl border border-bata bg-red-50 px-4 py-3 text-sm font-semibold text-bata"></p>
+        <p id="form-error" role="alert" class="hidden rounded-2xl border-2 border-bata bg-red-50 px-4 py-3 text-sm font-semibold text-bata"></p>
 
         <div>
           <label for="nama" class="label">Nama produk</label>
@@ -37,14 +37,14 @@
           <div>
             <label for="foto" class="label">Foto produk</label>
             <input id="foto" name="foto" type="file" accept="image/jpeg,image/png,image/webp,image/gif"
-                   class="kolom file:mr-3 file:rounded-full file:border-0 file:bg-pucuk file:px-3 file:py-1.5 file:font-semibold file:text-hutan">
+                   class="kolom file:mr-3 file:rounded-full file:border-0 file:bg-hutan file:px-3 file:py-1.5 file:font-semibold file:text-krim">
             <p class="pesan-error hidden" data-error="foto"></p>
           </div>
         </div>
 
-        <div id="foto-wadah" class="<%= produk && produk.foto ? '' : 'hidden' %> flex items-center gap-4 rounded-xl border border-garis bg-white p-3">
-          <img id="foto-preview" src="<%= produk && produk.foto ? produk.foto : '' %>" alt="Pratinjau foto produk" class="h-20 w-20 rounded-lg object-cover">
-          <p class="text-sm text-lumut">Pratinjau foto. Pilih file baru untuk menggantinya (maks. 2 MB).</p>
+        <div id="foto-wadah" class="<%= produk && produk.foto ? '' : 'hidden' %> flex items-center gap-4 rounded-2xl border-2 border-tinta bg-rasa2 p-3">
+          <img id="foto-preview" src="<%= produk && produk.foto ? produk.foto : '' %>" alt="Pratinjau foto produk" class="h-20 w-20 rounded-xl border-2 border-tinta object-cover">
+          <p class="text-sm font-medium text-tinta">Pratinjau foto. Pilih file baru untuk menggantinya (maks. 2 MB).</p>
         </div>
 
         <div>
@@ -67,29 +67,30 @@
       </form>
 
       <!-- Tips mengisi -->
-      <aside class="h-fit rounded-2xl border border-garis bg-pucuk p-5 lg:sticky lg:top-6" aria-labelledby="judul-tips">
-        <h2 id="judul-tips" class="text-xl font-bold text-daun">Tips mengisi</h2>
-        <ul class="mt-4 space-y-3">
-          <li class="rounded-xl bg-white p-4 text-lumut">Tulis nama produk dengan jelas, termasuk jenis buah dan beratnya.</li>
-          <li class="rounded-xl bg-white p-4 text-lumut">Sebut 2-3 keunggulan, misalnya rasa, tekstur, dan bahan.</li>
-          <li class="rounded-xl bg-white p-4 text-lumut">Jelaskan siapa pembelinya agar gaya bahasa caption pas.</li>
+      <aside class="h-fit rounded-3xl border-[3px] border-tinta bg-rasa1 p-6 lg:sticky lg:top-6" aria-labelledby="judul-tips">
+        <h2 id="judul-tips" class="judul text-2xl text-hutan">Tips mengisi</h2>
+        <ul class="mt-5 space-y-3">
+          <li class="rounded-2xl border-2 border-tinta bg-krim p-4 text-tinta">Tulis nama produk dengan jelas, termasuk jenis buah dan beratnya.</li>
+          <li class="rounded-2xl border-2 border-tinta bg-krim p-4 text-tinta">Sebut 2-3 keunggulan, misalnya rasa, tekstur, dan bahan.</li>
+          <li class="rounded-2xl border-2 border-tinta bg-krim p-4 text-tinta">Jelaskan siapa pembelinya agar gaya bahasa caption pas.</li>
         </ul>
       </aside>
     </div>
 
     <!-- Contoh pengisian -->
-    <section class="mt-14" aria-labelledby="judul-contoh">
-      <h2 id="judul-contoh" class="text-2xl font-extrabold tracking-tight text-daun">Contoh pengisian</h2>
-      <div class="mt-5 grid gap-5 sm:grid-cols-2">
+    <section class="mt-16" aria-labelledby="judul-contoh">
+      <h2 id="judul-contoh" class="judul text-3xl text-hutan sm:text-4xl">Contoh pengisian</h2>
+      <div class="mt-6 grid gap-5 sm:grid-cols-2">
         <% [
           { n: 'Kripik Apel Malang 100 g', k: 'renyah, manis alami, dari apel segar', t: 'ibu rumah tangga', gelap: true },
           { n: 'Kripik Nangka 100 g', k: 'wangi, manis, tanpa pewarna tambahan', t: 'pekerja kantoran', gelap: false },
           { n: 'Kripik Pisang 150 g', k: 'tipis, gurih, kemasan praktis', t: 'pelajar dan mahasiswa', gelap: false },
           { n: 'Kripik Salak 100 g', k: 'rasa khas salak, tekstur renyah', t: 'pencari camilan unik', gelap: true }
-        ].forEach(function (c) { %>
-          <div class="rounded-2xl border border-garis p-6 <%= c.gelap ? 'bg-[#cfe6d8]' : 'bg-pucuk' %>">
-            <p class="text-lg font-bold text-daun"><%= c.n %></p>
-            <dl class="mt-3 space-y-1 text-lumut">
+        ].forEach(function (c, i) { %>
+          <div class="rounded-3xl border-[3px] border-tinta p-6 <%= ['bg-rasa1', 'bg-rasa2', 'bg-rasa3', 'bg-rasa4'][i % 4] %>">
+            <p class="kecil-kap text-sm text-tinta/80">Contoh <%= String(i + 1).padStart(2, '0') %></p>
+            <p class="judul mt-1 text-xl text-hutan"><%= c.n %></p>
+            <dl class="mt-3 space-y-1 text-tinta">
               <div><dt class="inline font-semibold">Keunggulan:</dt> <dd class="inline"><%= c.k %></dd></div>
               <div><dt class="inline font-semibold">Target:</dt> <dd class="inline"><%= c.t %></dd></div>
             </dl>

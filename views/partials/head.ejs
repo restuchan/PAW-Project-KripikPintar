@@ -5,19 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="KripikPintar: katalog kripik buah khas Malang dengan bantuan AI.">
   <title><%= judul %></title>
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%231f6b45'/%3E%3Cellipse cx='16' cy='14' rx='9' ry='6' fill='%23f0bd3c'/%3E%3Cpath d='M6 17h20c0 6-4 9-10 9S6 23 6 17z' fill='%2312372a'/%3E%3C/svg%3E">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%231d4710'/%3E%3Cellipse cx='16' cy='14' rx='9' ry='6' fill='%23f5b71c'/%3E%3Cpath d='M6 17h20c0 6-4 9-10 9S6 23 6 17z' fill='%230e2a10'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <script>
     tailwind.config = {
       theme: {
         extend: {
+          // Nama token dipertahankan agar JS dan markup lama tetap bekerja; hanya nilainya yang diganti.
           colors: {
-            daun: '#12372a', hutan: '#1f6b45', segar: '#2a8a58', pucuk: '#e3f2e8',
-            kabut: '#f3f9f5', garis: '#d2e3d8', emas: '#f0bd3c', tinta: '#16241d',
-            lumut: '#4a5d53', bata: '#b4442b'
+            daun: '#1d4710', hutan: '#0e2a10', segar: '#ee8a12', pucuk: '#f8e8be',
+            kabut: '#f7ebcd', garis: '#d8c48c', emas: '#f5b71c', tinta: '#1a1608',
+            lumut: '#5a5030', bata: '#c23b22', krim: '#fff8e4',
+            rasa1: '#cde98f', rasa2: '#ffd08a', rasa3: '#a9e3ff', rasa4: '#ffb5a3'
           },
           fontFamily: {
-            sans: ['system-ui', '-apple-system', '"Segoe UI"', 'Roboto', '"Helvetica Neue"', 'Arial', 'sans-serif']
+            sans: ['Barlow', 'system-ui', '-apple-system', '"Segoe UI"', 'Roboto', 'Arial', 'sans-serif'],
+            display: ['Archivo', '"Arial Black"', 'Impact', 'sans-serif'],
+            kondensed: ['"Barlow Condensed"', '"Arial Narrow"', 'Arial', 'sans-serif']
           }
         }
       }
@@ -27,24 +34,49 @@
     /* Atribut hidden harus selalu menang atas class display seperti "flex" */
     [hidden] { display: none !important; }
 
+    body {
+      background-image: radial-gradient(120% 70% at 50% 0%, #fff3d2 0%, #f7ebcd 55%, #f0dba5 100%);
+      background-attachment: fixed;
+    }
+
+    /* Judul besar bergaya tipografi lebar, tebal, kapital */
+    .judul {
+      font-family: Archivo, "Arial Black", Impact, sans-serif;
+      font-weight: 900;
+      font-stretch: 125%;
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+      line-height: 0.96;
+    }
+    /* Teks kecil bergaya kondensed kapital (label, navigasi, nomor rasa) */
+    .kecil-kap {
+      font-family: "Barlow Condensed", "Arial Narrow", Arial, sans-serif;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
     @layer components {
       .btn {
-        @apply inline-flex items-center justify-center gap-2 min-h-[3rem] px-6 rounded-full font-bold transition-colors
+        @apply inline-flex items-center justify-center gap-2 min-h-[3rem] px-7 rounded-full border-2 border-transparent
+               font-kondensed text-lg font-bold uppercase tracking-wide transition-colors
                disabled:opacity-50 disabled:cursor-not-allowed
                focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-offset-2 focus-visible:outline-segar;
       }
-      .btn-primary { @apply btn bg-hutan text-white hover:bg-daun disabled:hover:bg-hutan; }
-      .btn-ghost   { @apply btn border-2 border-hutan text-hutan hover:bg-pucuk disabled:hover:bg-transparent; }
-      .btn-bahaya  { @apply btn border-2 border-bata text-bata hover:bg-red-50; }
-      .btn-kecil   { @apply min-h-[2.5rem] px-4 text-sm; }
+      .btn-primary { @apply btn border-hutan bg-hutan text-krim hover:bg-tinta hover:border-tinta disabled:hover:bg-hutan; }
+      .btn-ghost   { @apply btn border-hutan text-hutan hover:bg-hutan hover:text-krim disabled:hover:bg-transparent disabled:hover:text-hutan; }
+      .btn-bahaya  { @apply btn border-bata text-bata hover:bg-bata hover:text-white; }
+      .btn-kecil   { @apply min-h-[2.5rem] px-4 text-base; }
       .nav-link {
-        @apply inline-flex items-center min-h-[2.75rem] px-4 rounded-full border border-garis bg-white text-sm font-semibold text-daun
-               hover:bg-pucuk focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-offset-2 focus-visible:outline-segar;
+        @apply inline-flex items-center min-h-[2.75rem] px-3 rounded-full
+               font-kondensed text-lg font-bold uppercase tracking-wide text-hutan
+               hover:underline hover:underline-offset-4 decoration-2
+               focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-offset-2 focus-visible:outline-segar;
       }
-      .label { @apply block mb-1.5 font-semibold text-daun; }
+      .label { @apply block mb-1.5 font-kondensed text-base font-bold uppercase tracking-[0.08em] text-daun; }
       .kolom {
-        @apply w-full min-h-[3rem] rounded-xl border-2 border-[#9db8a8] bg-white px-4 py-3 text-base text-tinta
-               placeholder:text-[#72857b] focus:outline-none focus:border-segar focus:ring-4 focus:ring-segar/20;
+        @apply w-full min-h-[3rem] rounded-2xl border-2 border-tinta bg-krim px-4 py-3 text-base text-tinta
+               placeholder:text-lumut focus:outline-none focus:border-segar focus:ring-4 focus:ring-segar/30;
       }
       .pesan-error { @apply mt-1.5 text-sm font-semibold text-bata; }
     }

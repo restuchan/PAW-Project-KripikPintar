@@ -1,42 +1,42 @@
 <div id="chatbot-config" data-wa="<%= whatsappNomor %>" hidden></div>
 
 <button type="button" id="chatbot-tombol" data-buka-chatbot
-        class="fixed bottom-5 right-5 z-40 inline-flex min-h-[3.5rem] items-center gap-2 rounded-full bg-hutan px-5 font-bold text-white shadow-xl hover:bg-daun focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-offset-2 focus-visible:outline-segar"
+        class="kecil-kap fixed bottom-5 right-5 z-40 inline-flex min-h-[3.5rem] items-center gap-2 rounded-full border-2 border-tinta bg-hutan px-6 text-lg text-krim shadow-[4px_4px_0_#1a1608] transition-colors hover:bg-tinta focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-offset-2 focus-visible:outline-segar"
         aria-controls="chatbot-panel" aria-expanded="false">
   <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg>
   Chatbot
 </button>
 
 <section id="chatbot-panel" hidden aria-label="Chatbot KripikPintar"
-         class="fixed bottom-24 right-3 z-40 flex max-h-[75vh] w-[calc(100vw-1.5rem)] max-w-sm flex-col overflow-hidden rounded-2xl border border-garis bg-white shadow-2xl sm:right-5">
-  <div class="flex items-center justify-between bg-daun px-4 py-3 text-white">
+         class="fixed bottom-24 right-3 z-40 flex max-h-[75vh] w-[calc(100vw-1.5rem)] max-w-sm flex-col overflow-hidden rounded-3xl border-[3px] border-tinta bg-krim shadow-[6px_6px_0_#1a1608] sm:right-5">
+  <div class="flex items-center justify-between border-b-[3px] border-tinta bg-rasa2 px-4 py-3 text-tinta">
     <div>
-      <p class="font-bold">Asisten KripikPintar</p>
-      <p class="text-xs text-pucuk">Ditenagai Gemini &middot; tanya harga, stok, rasa, atau cara pesan</p>
+      <p class="judul text-lg">Asisten KripikPintar</p>
+      <p class="mt-1 text-xs font-medium text-tinta/80">Ditenagai Gemini &middot; tanya harga, stok, rasa, atau cara pesan</p>
     </div>
     <div class="flex items-center gap-1">
-      <button type="button" id="chatbot-reset" class="rounded-full p-2 hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-emas" aria-label="Mulai percakapan baru" title="Mulai percakapan baru">
-        <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
+      <button type="button" id="chatbot-reset" class="rounded-full p-2 hover:bg-tinta/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-tinta" aria-label="Mulai percakapan baru" title="Mulai percakapan baru">
+        <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
       </button>
-    <button type="button" id="chatbot-tutup" class="rounded-full p-2 hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-emas" aria-label="Tutup chatbot">
-      <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    <button type="button" id="chatbot-tutup" class="rounded-full p-2 hover:bg-tinta/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-tinta" aria-label="Tutup chatbot">
+      <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
     </button>
     </div>
   </div>
 
   <div id="chatbot-pesan" class="flex-1 space-y-3 overflow-y-auto bg-kabut p-4" aria-live="polite"></div>
 
-  <div id="chatbot-saran" class="flex flex-wrap gap-2 border-t border-garis bg-white px-4 pt-3">
-    <button type="button" data-saran="Cara memesan" class="rounded-full border border-garis px-3 py-1.5 text-sm font-semibold text-hutan hover:bg-pucuk">Cara memesan</button>
-    <button type="button" data-saran="Daftar harga" class="rounded-full border border-garis px-3 py-1.5 text-sm font-semibold text-hutan hover:bg-pucuk">Daftar harga</button>
-    <button type="button" data-saran="Cek stok produk" class="rounded-full border border-garis px-3 py-1.5 text-sm font-semibold text-hutan hover:bg-pucuk">Cek stok</button>
-    <button type="button" data-saran="Hubungi penjual" class="rounded-full border border-garis px-3 py-1.5 text-sm font-semibold text-hutan hover:bg-pucuk">Hubungi penjual</button>
+  <div id="chatbot-saran" class="flex flex-wrap gap-2 border-t-2 border-tinta bg-krim px-4 pt-3">
+    <button type="button" data-saran="Cara memesan" class="kecil-kap rounded-full border-2 border-tinta bg-white px-3 py-1 text-base text-hutan hover:bg-emas">Cara memesan</button>
+    <button type="button" data-saran="Daftar harga" class="kecil-kap rounded-full border-2 border-tinta bg-white px-3 py-1 text-base text-hutan hover:bg-emas">Daftar harga</button>
+    <button type="button" data-saran="Cek stok produk" class="kecil-kap rounded-full border-2 border-tinta bg-white px-3 py-1 text-base text-hutan hover:bg-emas">Cek stok</button>
+    <button type="button" data-saran="Hubungi penjual" class="kecil-kap rounded-full border-2 border-tinta bg-white px-3 py-1 text-base text-hutan hover:bg-emas">Hubungi penjual</button>
   </div>
 
-  <form id="chatbot-form" class="flex gap-2 bg-white p-4" autocomplete="off">
+  <form id="chatbot-form" class="flex gap-2 bg-krim p-4" autocomplete="off">
     <label for="chatbot-input" class="sr-only">Tulis pertanyaan</label>
     <input id="chatbot-input" type="text" maxlength="300" placeholder="Tulis pertanyaanmu..."
-           class="min-h-[2.75rem] flex-1 rounded-full border-2 border-[#9db8a8] px-4 text-base placeholder:text-lumut focus:border-segar focus:outline-none focus:ring-4 focus:ring-segar/20">
+           class="min-h-[2.75rem] flex-1 rounded-full border-2 border-tinta bg-white px-4 text-base placeholder:text-lumut focus:border-segar focus:outline-none focus:ring-4 focus:ring-segar/30">
     <button type="submit" id="chatbot-kirim" class="btn-primary btn-kecil">Kirim</button>
   </form>
 </section>
