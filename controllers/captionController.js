@@ -1,7 +1,11 @@
 const Produk = require('../models/produkModel');
 const Caption = require('../models/captionModel');
-const { buatCaption } = require('../utils/captionGenerator');
+const { buatCaption: buatCaptionTemplate } = require('../utils/captionGenerator');
+const { buatCaptionGemini, GeminiError } = require('../services/gemini.service');
 const { bungkus, idValid } = require('../utils/http');
+
+// Jika Gemini gagal, pakai caption template agar alur pemilik tidak terhenti (matikan dengan CAPTION_FALLBACK=off)
+const PAKAI_CADANGAN = (process.env.CAPTION_FALLBACK || 'on').toLowerCase() !== 'off';
 
 async function ambilProduk(req, res) {
   const id = idValid(req.params.id);
@@ -13,13 +17,26 @@ async function ambilProduk(req, res) {
   return produk;
 }
 
-// POST /api/produk/:id/caption/generate  -> membuat caption (belum disimpan)
+// POST /api/produk/:id/caption/generate  -> membuat caption dengan Gemini (belum disimpan)
+// Respons: { sukses, caption, variasi, sumber: 'gemini' | 'template' }
 exports.generate = bungkus(async (req, res) => {
   const produk = await ambilProduk(req, res);
   if (!produk) return;
   const hindari = Number.isInteger(req.body.variasi) ? req.body.variasi : undefined;
-  const { teks, variasi } = buatCaption(produk, hindari);
-  res.json({ sukses: true, caption: teks, variasi });
+
+  try {
+    const { teks, variasi } = await buatCaptionGemini(produk, hindari);
+    return res.json({ sukses: true, caption: teks, variasi, sumber: 'gemini' });
+  } catch (err) {
+    if (!(err instanceof GeminiError)) throw err;
+    console.error(`Caption Gemini gagal [${err.kode}]${err.detail ? ': ' + err.detail : ''}`);
+
+    if (PAKAI_CADANGAN) {
+      const { teks, variasi } = buatCaptionTemplate(produk, hindari);
+      return res.json({ sukses: true, caption: teks, variasi, sumber: 'template' });
+    }
+    return res.status(err.status).json({ sukses: false, pesan: err.pesanPengguna });
+  }
 });
 
 // GET /api/produk/:id/caption  -> riwayat caption yang tersimpan

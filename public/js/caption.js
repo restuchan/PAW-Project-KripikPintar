@@ -32,7 +32,9 @@
       if (!res.ok) throw new Error(data.pesan || 'Gagal membuat caption');
       teks.value = data.caption;
       variasiTerakhir = data.variasi;
-      status.textContent = 'Caption siap. Kamu bisa mengeditnya sebelum disalin.';
+      status.textContent = data.sumber === 'template'
+        ? 'Caption siap (versi cadangan karena AI sedang sibuk). Kamu bisa mengeditnya sebelum disalin.'
+        : 'Caption siap. Kamu bisa mengeditnya sebelum disalin.';
       aktif(true);
     } catch (err) {
       status.textContent = '';
